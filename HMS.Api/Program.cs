@@ -3,6 +3,9 @@ using HMS.Api.Extensions;
 using HMS.Core.Contracts;
 using HMS.InfraStructure.Data.Context;
 using HMS.InfraStructure.Repositories;
+using HMS.Service.MappingProfile;
+using HMS.Service.Services;
+using HMS.ServiceAbstraction;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -25,6 +28,8 @@ namespace HMS.Api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddAutoMapper(typeof(ServiceAssemblyReference).Assembly);
 
             var app = builder.Build();
 

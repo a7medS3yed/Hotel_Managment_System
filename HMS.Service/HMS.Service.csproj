@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HMS.Core\HMS.Core.csproj" />
     <ProjectReference Include="..\HMS.ServiceAbstraction\HMS.ServiceAbstraction.csproj" />
   </ItemGroup>

@@ -18,6 +18,11 @@ namespace HMS.Core.Contracts
                Expression<Func<TEntity, object>>? orderByDesc = null
            );
         Task<TEntity?> GetByIdAsync(TKey id);
+        Task<TEntity?> GetByIdAsync(
+            TKey id,
+            Expression<Func<TEntity, bool>>? filter = null,
+            List<Expression<Func<TEntity, object>>>? includes = null
+            );
         Task AddAsync(TEntity entity);
         void UpdateAsync(TEntity entity);
         void DeleteAsync(TEntity entity);

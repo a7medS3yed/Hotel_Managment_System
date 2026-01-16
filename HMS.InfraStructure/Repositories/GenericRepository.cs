@@ -55,5 +55,27 @@ namespace HMS.InfraStructure.Repositories
 
             return await query.AsNoTracking().ToListAsync();
         }
+
+        public async Task<TEntity?> GetByIdAsync(
+            TKey id,
+            Expression<Func<TEntity, bool>>? filter = null,
+            List<Expression<Func<TEntity, object>>>? includes = null
+            )
+        {
+           var query =  _dbContext.Set<TEntity>().AsQueryable();
+           
+            if (filter is not null)
+            { 
+                query = query.Where(filter);
+            }
+
+            if (includes is not null)
+            {
+                foreach (var include in includes)
+                    query = query.Include(include);
+            }
+
+            return await query.FirstOrDefaultAsync(e => e.Id!.Equals(id));
+        }
     }
 }
