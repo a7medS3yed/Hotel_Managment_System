@@ -24,7 +24,7 @@ namespace HMS.Core.Contracts
             List<Expression<Func<TEntity, object>>>? includes = null
             );
         Task AddAsync(TEntity entity);
-        void UpdateAsync(TEntity entity);
-        void DeleteAsync(TEntity entity);
+        void Update(TEntity entity);
+        void Delete(TEntity entity);
     }
 }

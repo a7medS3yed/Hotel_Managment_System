@@ -30,10 +30,10 @@ namespace HMS.InfraStructure.Repositories
         public async Task AddAsync(TEntity entity)
            => await _dbContext.Set<TEntity>().AddAsync(entity);
         
-        public void UpdateAsync(TEntity entity)
+        public void Update(TEntity entity)
            => _dbContext.Set<TEntity>().Update(entity);
         
-        public void DeleteAsync(TEntity entity)
+        public void Delete(TEntity entity)
            => _dbContext.Set<TEntity>().Remove(entity);
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(

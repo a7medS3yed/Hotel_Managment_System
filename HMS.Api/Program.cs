@@ -3,6 +3,7 @@ using HMS.Api.Extensions;
 using HMS.Core.Contracts;
 using HMS.InfraStructure.Data.Context;
 using HMS.InfraStructure.Repositories;
+using HMS.Service.Helper;
 using HMS.Service.MappingProfile;
 using HMS.Service.Services;
 using HMS.ServiceAbstraction;
@@ -29,6 +30,7 @@ namespace HMS.Api
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddTransient<IAttachmentService, AttachmentService>();
             builder.Services.AddAutoMapper(typeof(ServiceAssemblyReference).Assembly);
 
             var app = builder.Build();
@@ -43,6 +45,7 @@ namespace HMS.Api
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             //app.UseAuthorization();
 
