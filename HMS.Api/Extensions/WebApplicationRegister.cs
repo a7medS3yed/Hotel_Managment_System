@@ -1,4 +1,5 @@
-﻿using HMS.InfraStructure.Data.Context;
+﻿using HMS.Core.Contracts;
+using HMS.InfraStructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace HMS.Api.Extensions
@@ -18,5 +19,14 @@ namespace HMS.Api.Extensions
 
             return app;
         }
+
+        public static async Task<WebApplication> SeedingIdentityDataAsync(this WebApplication app)
+        {
+           await  using var scope = app.Services.CreateAsyncScope();
+           var dataInitializer = scope.ServiceProvider.GetRequiredService<IDataInitializer>();
+           await dataInitializer.InitializeDataAsync();
+
+            return app;
+        } 
     }
 }

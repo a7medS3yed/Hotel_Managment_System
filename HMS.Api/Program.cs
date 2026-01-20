@@ -1,12 +1,15 @@
 
 using HMS.Api.Extensions;
 using HMS.Core.Contracts;
+using HMS.Core.Entities.SecurityModul;
 using HMS.InfraStructure.Data.Context;
+using HMS.InfraStructure.Data.DataSeed;
 using HMS.InfraStructure.Repositories;
 using HMS.Service.Helper;
 using HMS.Service.MappingProfile;
 using HMS.Service.Services;
 using HMS.ServiceAbstraction;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -33,9 +36,18 @@ namespace HMS.Api
             builder.Services.AddTransient<IAttachmentService, AttachmentService>();
             builder.Services.AddAutoMapper(typeof(ServiceAssemblyReference).Assembly);
 
+            builder.Services.AddIdentityCore<HotelUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<HMSDbContext>();
+
+            builder.Services.AddScoped<IDataInitializer, DataInitializer>();
+
+
+
             var app = builder.Build();
 
             await app.MigrateDatabaseAsync();
+            await app.SeedingIdentityDataAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
