@@ -1,4 +1,5 @@
-﻿using HMS.Core.Entities.SecurityModul;
+﻿using HMS.Core.Entities.BookingModule;
+using HMS.Core.Entities.SecurityModul;
 using HMS.Core.Entities.SecurityModule;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace HMS.InfraStructure.Data.Context
             modelBuilder.Entity<HotelUser>().ToTable("Users");
             modelBuilder.Entity<StaffUser>().ToTable("StaffUsers");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles");
+            modelBuilder.Entity<Booking>().Property(B => B.TotalAmount).HasPrecision(8, 2);
 
             // Apply all configurations from the current assembly
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
