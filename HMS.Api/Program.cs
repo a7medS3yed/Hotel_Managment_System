@@ -9,8 +9,11 @@ using HMS.Service.Helper;
 using HMS.Service.MappingProfile;
 using HMS.Service.Services;
 using HMS.ServiceAbstraction;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace HMS.Api
@@ -41,6 +44,25 @@ namespace HMS.Api
                 .AddEntityFrameworkStores<HMSDbContext>();
 
             builder.Services.AddScoped<IDataInitializer, DataInitializer>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.SaveToken = true;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                            ValidAudience = builder.Configuration["Jwt:Audience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+                            )
+                        };
+                    });
 
 
 
@@ -58,6 +80,8 @@ namespace HMS.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             //app.UseAuthorization();
 

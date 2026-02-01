@@ -9,7 +9,6 @@ namespace HMS.Core.Entities.SecurityModule
 {
     public class StaffUser : HotelUser
     {
-        public string Speciality { get; set; } = null!;
         public StaffSpecialities specialities { get; set; }
     }
 }
