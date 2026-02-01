@@ -4,6 +4,7 @@ using HMS.Core.Contracts;
 using HMS.Core.Entities.SecurityModul;
 using HMS.InfraStructure.Data.Context;
 using HMS.InfraStructure.Data.DataSeed;
+using HMS.InfraStructure.ExternalService;
 using HMS.InfraStructure.Repositories;
 using HMS.Service.Helper;
 using HMS.Service.MappingProfile;
@@ -63,6 +64,11 @@ namespace HMS.Api
                             )
                         };
                     });
+            builder.Services.Configure<EmailSettings>(
+                builder.Configuration.GetSection("EmailSettings"));
+
+            builder.Services.AddTransient<IEmailService, EmailService>();
+
 
 
 

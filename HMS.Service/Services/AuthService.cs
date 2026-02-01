@@ -23,11 +23,13 @@ namespace HMS.Service.Services
     {
         private readonly UserManager<HotelUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AuthService(UserManager<HotelUser> userManager, IConfiguration configuration)
+        public AuthService(UserManager<HotelUser> userManager, IConfiguration configuration, IEmailService emailService)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         public async Task<GenericResponse<UserDto>> RegisterGuestAsync(RegisterDto registerDto)
@@ -72,6 +74,12 @@ namespace HMS.Service.Services
 
             else
             {
+                await _emailService.SendEmailAsync(
+                    newUser.Email!,
+                    $"Welcome: {newUser.FullName} to Our Hotel Management System",
+                    "This is welcome message from our app please go and login to our app and enjoy our services"
+                    );
+
                 var accessToken = await GenerateJwtTokenAsync(newUser);
                 var refreshToken = GenerateRefreshToken();
 
