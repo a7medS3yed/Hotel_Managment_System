@@ -1,13 +1,20 @@
 
 using HMS.Api.Extensions;
 using HMS.Core.Contracts;
+using HMS.Core.Entities.SecurityModul;
 using HMS.InfraStructure.Data.Context;
+using HMS.InfraStructure.Data.DataSeed;
+using HMS.InfraStructure.ExternalService;
 using HMS.InfraStructure.Repositories;
 using HMS.Service.Helper;
 using HMS.Service.MappingProfile;
 using HMS.Service.Services;
 using HMS.ServiceAbstraction;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace HMS.Api
@@ -33,9 +40,42 @@ namespace HMS.Api
             builder.Services.AddTransient<IAttachmentService, AttachmentService>();
             builder.Services.AddAutoMapper(typeof(ServiceAssemblyReference).Assembly);
 
+            builder.Services.AddIdentityCore<HotelUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<HMSDbContext>();
+
+            builder.Services.AddScoped<IDataInitializer, DataInitializer>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.SaveToken = true;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                            ValidAudience = builder.Configuration["Jwt:Audience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+                            )
+                        };
+                    });
+            builder.Services.Configure<EmailSettings>(
+                builder.Configuration.GetSection("EmailSettings"));
+
+            builder.Services.AddTransient<IEmailService, EmailService>();
+
+
+
+
             var app = builder.Build();
 
             await app.MigrateDatabaseAsync();
+            await app.SeedingIdentityDataAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -46,6 +86,8 @@ namespace HMS.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             //app.UseAuthorization();
 
