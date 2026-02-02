@@ -68,6 +68,7 @@ namespace HMS.Api
                 builder.Configuration.GetSection("EmailSettings"));
 
             builder.Services.AddTransient<IEmailService, EmailService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
 
 
 
