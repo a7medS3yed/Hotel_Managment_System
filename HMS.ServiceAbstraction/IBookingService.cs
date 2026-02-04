@@ -10,6 +10,6 @@ namespace HMS.ServiceAbstraction
 {
     public interface IBookingService
     {
-        Task<GenericResponse<string>> CreateBookingAsync(string userId, CreateBookingDto createBookingDto);
+        Task<GenericResponse<Guid>> CreateBookingAsync(string userId, CreateBookingDto createBookingDto);
     }
 }

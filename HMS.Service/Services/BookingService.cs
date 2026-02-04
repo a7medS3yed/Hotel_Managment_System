@@ -24,9 +24,9 @@ namespace HMS.Service.Services
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
-        public async Task<GenericResponse<string>> CreateBookingAsync(string userId, CreateBookingDto createBookingDto)
+        public async Task<GenericResponse<Guid>> CreateBookingAsync(string userId, CreateBookingDto createBookingDto)
         {
-                var response = new GenericResponse<string>();
+                var response = new GenericResponse<Guid>();
             try
             {
 
@@ -90,7 +90,7 @@ namespace HMS.Service.Services
                 {
                     response.StatusCode = StatusCodes.Status201Created;
                     response.Message = "Booking created successfully.";
-                    response.Data = newBooking.Id.ToString();
+                    response.Data = newBooking.Id;
                     return response;
                 }
                 else

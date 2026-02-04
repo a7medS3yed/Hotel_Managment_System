@@ -10,18 +10,28 @@ namespace HMS.Api.Controllers
     public class BookingsController : BaseApiController
     {
         private readonly IBookingService _bookingService;
-        public BookingsController(IBookingService bookingService)
+        private readonly IPaymentService _paymentService;
+
+        public BookingsController(IBookingService bookingService, IPaymentService paymentService)
         {
             _bookingService = bookingService;
+            _paymentService = paymentService;
         }
 
         [Authorize(Roles ="Guest")]
         [HttpPost]
-        public async Task<ActionResult<GenericResponse<string>>> CreateBooking([FromBody] CreateBookingDto createBookingDto)
+        public async Task<ActionResult<GenericResponse<Guid>>> CreateBooking([FromBody] CreateBookingDto createBookingDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = await _bookingService.CreateBookingAsync(userId!, createBookingDto);
 
+            return HandleResponse(result);
+        }
+
+        [HttpPost("{id}/pay")]
+        public async Task<ActionResult<GenericResponse<string>>> PayForBooking([FromRoute] Guid id)
+        {
+            var result = await _paymentService.CreatePaymentUrlAsync(id);
             return HandleResponse(result);
         }
     }
