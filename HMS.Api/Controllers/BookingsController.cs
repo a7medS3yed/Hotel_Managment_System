@@ -18,7 +18,7 @@ namespace HMS.Api.Controllers
             _paymentService = paymentService;
         }
 
-        [Authorize(Roles ="Guest")]
+        [Authorize(Roles = "Guest")]
         [HttpPost]
         public async Task<ActionResult<GenericResponse<Guid>>> CreateBooking([FromBody] CreateBookingDto createBookingDto)
         {
@@ -32,6 +32,31 @@ namespace HMS.Api.Controllers
         public async Task<ActionResult<GenericResponse<string>>> PayForBooking([FromRoute] Guid id)
         {
             var result = await _paymentService.CreatePaymentUrlAsync(id);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin")]
+        public async Task<ActionResult<GenericResponse<IEnumerable<BookingDto>>>> GetAllBookingsForAdmin()
+        {
+            var result = await _bookingService.GetAllBookingForAdminAsync();
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/cancel")]
+        public async Task<ActionResult<GenericResponse<bool>>> CancelBooking([FromRoute] Guid id)
+        {
+            var result = await _bookingService.CancelBookingAsync(id);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Guest")]
+        [HttpGet("my")]
+        public async Task<ActionResult<GenericResponse<IEnumerable<MyBookingDto>>>> GetMyBookings()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _bookingService.GetMyBookingAsync(userId!);
             return HandleResponse(result);
         }
     }

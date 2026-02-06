@@ -15,7 +15,8 @@ namespace HMS.Core.Contracts
         Task<IEnumerable<TEntity>> GetAllAsync(
                Expression<Func<TEntity, bool>>? filter = null,
                Expression<Func<TEntity, object>>? orderBy = null,
-               Expression<Func<TEntity, object>>? orderByDesc = null
+               Expression<Func<TEntity, object>>? orderByDesc = null,
+               List<Expression<Func<TEntity, object>>>? includes = null
            );
         Task<TEntity?> GetByIdAsync(TKey id);
         Task<TEntity?> GetByIdAsync(
