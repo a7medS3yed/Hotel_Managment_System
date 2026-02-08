@@ -10,6 +10,6 @@ namespace HMS.ServiceAbstraction
 {
     public interface IAiModerationService
     {
-        Task<GenericResponse<AiDto>> AnalyzeAsync(string text);
+        Task<(bool IsApproved, string Reason)> AnalyzeAsync(string text);
     }
 }

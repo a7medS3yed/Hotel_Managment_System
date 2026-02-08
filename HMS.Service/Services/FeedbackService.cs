@@ -43,10 +43,10 @@ namespace HMS.Service.Services
                     return response;
                 }
 
-                if (!aiResult!.Data!.IsApproved)
+                if (!aiResult.IsApproved)
                 {
                     response.StatusCode = StatusCodes.Status400BadRequest;
-                    response.Message = $"Feedback rejected: {aiResult.Data.Reason}";
+                    response.Message = $"Feedback rejected: {aiResult.Reason}";
                     response.Data = false;
                     return response;
                 }
@@ -57,7 +57,7 @@ namespace HMS.Service.Services
                     Content = feedbackDto.Content,
                     Status = FeedbackStatus.Approved,
                     AiResult = "Approved",
-                    AiReason = aiResult.Data.Reason
+                    AiReason = aiResult.Reason
                 };
 
                 await _unitOfWork.Repository<Feedback, int>().AddAsync(feedback);
