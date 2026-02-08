@@ -71,6 +71,7 @@ namespace HMS.Api
             builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddHttpClient<IPaymentService, IPaymentService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 
 
