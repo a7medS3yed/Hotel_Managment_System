@@ -4,6 +4,7 @@ using HMS.InfraStructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HMS.InfraStructure.Data.Migrations
 {
     [DbContext(typeof(HMSDbContext))]
-    partial class HMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260208113306_ServiceModule")]
+    partial class ServiceModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,47 +77,6 @@ namespace HMS.InfraStructure.Data.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Booking");
-                });
-
-            modelBuilder.Entity("HMS.Core.Entities.FeedbackModule.Feedback", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AiReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AiResult")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Feedbacks", (string)null);
                 });
 
             modelBuilder.Entity("HMS.Core.Entities.RoomModule.Room", b =>
@@ -513,17 +475,6 @@ namespace HMS.InfraStructure.Data.Migrations
                     b.Navigation("Guest");
 
                     b.Navigation("Room");
-                });
-
-            modelBuilder.Entity("HMS.Core.Entities.FeedbackModule.Feedback", b =>
-                {
-                    b.HasOne("HMS.Core.Entities.SecurityModul.HotelUser", "Guest")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Guest");
                 });
 
             modelBuilder.Entity("HMS.Core.Entities.RoomModule.RoomImage", b =>
