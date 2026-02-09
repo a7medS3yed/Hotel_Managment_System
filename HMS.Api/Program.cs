@@ -73,6 +73,8 @@ namespace HMS.Api
             builder.Services.AddHttpClient<IAiModerationService, OpenAiModerationService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+            builder.Services.AddHttpClient<IAiModerationService, HuggingFaceModerationService>();
+
 
 
 
