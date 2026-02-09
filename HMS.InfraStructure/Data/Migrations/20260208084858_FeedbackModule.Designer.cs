@@ -4,6 +4,7 @@ using HMS.InfraStructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HMS.InfraStructure.Data.Migrations
 {
     [DbContext(typeof(HMSDbContext))]
-    partial class HMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260208084858_FeedbackModule")]
+    partial class FeedbackModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -273,86 +276,6 @@ namespace HMS.InfraStructure.Data.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("HMS.Core.Entities.ServiceModule.Service", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 100L);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Services", (string)null);
-                });
-
-            modelBuilder.Entity("HMS.Core.Entities.ServiceModule.ServiceRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 100L);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("GuestId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StaffId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GuestId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("ServiceRequests", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -533,32 +456,6 @@ namespace HMS.InfraStructure.Data.Migrations
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HMS.Core.Entities.ServiceModule.ServiceRequest", b =>
-                {
-                    b.HasOne("HMS.Core.Entities.SecurityModul.HotelUser", "Guest")
-                        .WithMany()
-                        .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HMS.Core.Entities.ServiceModule.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("HMS.Core.Entities.SecurityModul.HotelUser", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Guest");
-
-                    b.Navigation("Service");
-
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

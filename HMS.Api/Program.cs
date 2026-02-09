@@ -70,8 +70,11 @@ namespace HMS.Api
             builder.Services.AddTransient<IEmailService, EmailService>();
             builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddHttpClient<IPaymentService, IPaymentService>();
+            //builder.Services.AddHttpClient<IAiModerationService, OpenAiModerationService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
-            builder.Services.AddScoped<IServiceManagmentService, ServiceManagmentServcie>();
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+            builder.Services.AddHttpClient<IAiModerationService, HuggingFaceModerationService>();
+
 
 
 
