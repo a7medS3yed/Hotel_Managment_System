@@ -183,7 +183,7 @@ namespace HMS.Service.Services
             var response = new GenericResponse<IEnumerable<ServiceRequestDto>>();
 
             var requests = await _unitOfWork.Repository<ServiceRequest, int>()
-                                    .GetAllAsync(r => r.GuestId == guestId);
+                                    .GetAllAsync(r => r.GuestId == guestId, null, r => r.CreatedAt, [r => r.Staff!, r => r.Service]);
 
             var requestDtos = _mapper.Map<IEnumerable<ServiceRequestDto>>(requests);
 

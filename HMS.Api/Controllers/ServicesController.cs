@@ -12,7 +12,7 @@ namespace HMS.Api.Controllers
     {
         [Authorize(Roles = "Guest")]
         [HttpPost("Request")]
-        public async Task<ActionResult<GenericResponse<int>>> Create(CreateServiceRequestDto createServiceRequestDto)
+        public async Task<ActionResult<GenericResponse<bool>>> Create(CreateServiceRequestDto createServiceRequestDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = await serviceManagmentService.CreateAsync(createServiceRequestDto, userId!);
@@ -21,14 +21,14 @@ namespace HMS.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPatch("{id}/AssignStaff")]
-        public async Task<ActionResult<GenericResponse<bool>>> AssignStaff([FromRoute] int id, [FromQuery] string staffId)
+        [HttpPatch("{id}/Assign")]
+        public async Task<ActionResult<GenericResponse<bool>>> AssignStaff([FromRoute] int id, string staffId)
         {
             var result = await serviceManagmentService.AssignStaffAsync(id, staffId);
             return HandleResponse(result);
         }
 
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Sttaf")]
         [HttpPatch("{id}/Status")]
         public async Task<ActionResult<GenericResponse<bool>>> UpdateStatus([FromRoute] int id, HMS.Shared.SharedEnums.ServiceRequestStatus status)
         {
@@ -39,7 +39,7 @@ namespace HMS.Api.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<GenericResponse<int>>> CreateService([FromBody] CreateServiceDto createServiceDto)
+        public async Task<ActionResult<GenericResponse<ServiceDto>>> CreateService([FromBody] CreateServiceDto createServiceDto)
         {
             var result = await serviceManagmentService.CreateAsync(createServiceDto);
             return HandleResponse(result);
