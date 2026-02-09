@@ -33,6 +33,14 @@ namespace HMS.Service.Services
 
             try
             {
+                if (string.IsNullOrWhiteSpace(feedbackDto.Content))
+                {
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    response.Message = "Feedback content cannot be empty.";
+                    response.Data = false;
+                    return response;
+                }
+
                 var aiResult = await _aiService.AnalyzeAsync(feedbackDto.Content);
 
                 if (feedbackDto.Content is null)
