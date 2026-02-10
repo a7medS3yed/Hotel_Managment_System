@@ -1,0 +1,18 @@
+﻿using HMS.Shared.DTOs.BookingDTOs;
+using HMS.Shared.Responses;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HMS.ServiceAbstraction
+{
+    public interface IBookingService
+    {
+        Task<GenericResponse<Guid>> CreateBookingAsync(string userId, CreateBookingDto createBookingDto);
+        Task<GenericResponse<IEnumerable<BookingDto>>> GetAllBookingForAdminAsync();
+        Task<GenericResponse<bool>> CancelBookingAsync(Guid bookingId);
+        Task<GenericResponse<IEnumerable<MyBookingDto>>> GetMyBookingAsync(string userId);
+    }
+}
