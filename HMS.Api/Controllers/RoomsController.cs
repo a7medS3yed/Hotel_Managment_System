@@ -11,7 +11,7 @@ namespace HMS.Api.Controllers
     
     public class RoomsController(IRoomService roomService) : BaseApiController
     {
-        [Authorize("Guest")]
+        [Authorize]
         [HttpGet("Public")] // api: baseUrl/api/Rooms/Public
         public async Task<ActionResult<GenericResponse<IEnumerable<RoomDTO>>>> GetAllRooms(string? roomType, string? sort)
         {
@@ -29,7 +29,7 @@ namespace HMS.Api.Controllers
             return HandleResponse(result);
         }
 
-        [Authorize("Admin, Staff")]
+        [Authorize("Admin, Sttaf")]
         [HttpGet("Admin")] // api: baseUrl/api/Rooms/Admin
         public async Task<ActionResult<GenericResponse<IEnumerable<RoomForAdminDto>>>> GetAllRoomsForAdmin([FromQuery] RoomQueryParam roomQueryParam)
         {

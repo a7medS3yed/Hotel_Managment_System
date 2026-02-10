@@ -1,5 +1,6 @@
 
 using HMS.Api.Extensions;
+using HMS.Api.Middlewares;
 using HMS.Core.Contracts;
 using HMS.Core.Entities.SecurityModul;
 using HMS.InfraStructure.Data.Context;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +25,17 @@ namespace HMS.Api
     {
         public static async Task Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .WriteTo.File(
+                    path: "Logs/log-.txt",
+                    rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog();
 
             // Add services to the container.
 
@@ -83,6 +95,8 @@ namespace HMS.Api
 
             await app.MigrateDatabaseAsync();
             await app.SeedingIdentityDataAsync();
+
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
